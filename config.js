@@ -77,7 +77,7 @@ window.HBD_CONFIG = {
   letterParagraphs: [
     "Selamat ulang tahun yang ke-17 yaa NANAAA! Happy Sweet Seventeen! Hari ini hari yang spesial banget karena hari ini adalah hari lahir orang yang paling berarti di hidup ryuu.",
     "Terima kasih udah selalu ada, udah bikin hari-hari ryuu lebih bahagia, dan udah menjadi alasan ryuu tersenyum setiap hari. Ryu bersyukur banget bisa kenal dan punya Nanaa sampai sekarang.",
-    "Di umur 17 tahun yang manis ini, Ryu cuma mau doain semoga semua hal baik selalu datang ke hidup sayang. Semoga sehat selalu, panjang umur, dimudahkan segala urusannya, dan semua impian sayang bisa tercapai satu per satu.",
+    "Di umur 17 tahun yang manis ini, Ryu cuma mau doain semoga semua hal baik selalu datang ke hidup Nanaa. Semoga sehat selalu, panjang umur, dimudahkan segala urusannya, dan semua impian nanaa bisa tercapai satu per satu.",
     "Tetap jadi pribadi yang kuat, baik, dan tulus seperti sekarang ya. Jangan lupa kalau ryuu selalu ada buat Nanaa dalam keadaan apa pun.",
     "Sekali lagi, Happy Sweet Seventeen sayanggg. Semoga hari ini penuh kebahagiaan dan tahun ke-17 ini menjadi tahun terbaik untuk nanaa yaaa cantikuu.",
     "I love you, today, tomorrow, and always. 🤍"
