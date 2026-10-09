@@ -736,7 +736,9 @@ html, body {
 .cover-polaroid-item img {
   width: 100%;
   height: 130px;
-  object-fit: cover;
+  object-fit: var(--photo-fit, cover);
+  object-position: var(--photo-position, 50% 50%);
+  background: #f3ebe5;
   border-radius: 2px;
   display: block;
 }
@@ -1056,16 +1058,17 @@ html, body {
 
 .polaroid-card .polaroid-photo-box {
   width: 100%;
-  aspect-ratio: 1 / 1.15;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   border-radius: 2px;
-  background: #1a1528;
+  background: #f3ebe5;
 }
 
 .polaroid-card .polaroid-photo-box img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: var(--photo-fit, cover);
+  object-position: var(--photo-position, 50% 50%);
   display: block;
   transition: transform 0.5s ease;
 }
@@ -1077,6 +1080,11 @@ html, body {
   text-align: center;
   margin-top: 8px;
   line-height: 1.2;
+  min-height: 2.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-wrap: anywhere;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1530,8 +1538,9 @@ html, body {
 
 .lightbox-polaroid img {
   width: 100%;
-  max-height: 520px;
-  object-fit: cover;
+  max-height: min(520px, calc(100dvh - 240px));
+  object-fit: contain;
+  background: #f3ebe5;
   border-radius: 4px;
   display: block;
 }

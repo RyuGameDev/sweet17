@@ -51,31 +51,31 @@ window.HBD_CONFIG = {
   letterTitle: "Happy Sweet 17",
   letterGreeting: "HAPPY SWEET SEVENTEEN SAYANGKUUU 🤍✨",
   letterParagraphs: [
-    "Selamat ulang tahun yang ke-17 yaa cinnnn! Happy Sweet Seventeen! Hari ini hari yang spesial banget karena hari ini adalah hari lahir orang yang paling berarti di hidupku.",
-    "Terima kasih udah selalu ada, udah bikin hari-hariku lebih bahagia, dan udah menjadi alasan aku tersenyum setiap hari. Aku bersyukur banget bisa kenal dan punya sayang sampai sekarang.",
+    "Selamat ulang tahun yang ke-17 yaa NANAAA! Happy Sweet Seventeen! Hari ini hari yang spesial banget karena hari ini adalah hari lahir orang yang paling berarti di hidup ryuu.",
+    "Terima kasih udah selalu ada, udah bikin hari-hari ryuu lebih bahagia, dan udah menjadi alasan ryuu tersenyum setiap hari. Ryu bersyukur banget bisa kenal dan punya Nanaa sampai sekarang.",
     "Di umur 17 tahun yang manis ini, aku cuma mau doain semoga semua hal baik selalu datang ke hidup sayang. Semoga sehat selalu, panjang umur, dimudahkan segala urusannya, dan semua impian sayang bisa tercapai satu per satu.",
-    "Tetap jadi pribadi yang kuat, baik, dan tulus seperti sekarang ya. Jangan lupa kalau aku selalu ada buat sayang dalam keadaan apa pun.",
-    "Sekali lagi, Happy Sweet Seventeen sayanggg. Semoga hari ini penuh kebahagiaan dan tahun ke-17 ini menjadi tahun terbaik untuk sayang.",
+    "Tetap jadi pribadi yang kuat, baik, dan tulus seperti sekarang ya. Jangan lupa kalau ryuu selalu ada buat Nanaa dalam keadaan apa pun.",
+    "Sekali lagi, Happy Sweet Seventeen sayanggg. Semoga hari ini penuh kebahagiaan dan tahun ke-17 ini menjadi tahun terbaik untuk nanaa yaaa cantikuu.",
     "I love you, today, tomorrow, and always. 🤍"
   ],
-  letterButton: "HER MOMENTS ➜",
+  letterButton: "SWEET ALBUM ➜",
 
   // ------------------------------------------------------------------
   // 5. GALERI FOTO POLAROID (HER BEAUTIFUL MOMENTS)
   // ------------------------------------------------------------------
-  // Kamu cukup mengganti file foto di folder "assets/photo1.jpg", dst
-  // atau ganti path file src di bawah ini.
+  // Delapan foto pilihan disimpan di assets/album/. Foto kiriman asli tetap ada.
+  // position mengatur titik fokus di polaroid; fit: "contain" menampilkan foto utuh.
   memoriesTitle: "Her Beautiful Moments",
   memoriesSubtitle: "✧ every smile that brightens up my world ✧",
   photos: [
-    { src: "assets/photo1.jpg", caption: "The prettiest smile in the world ✨", date: "Sweet 17" },
-    { src: "assets/photo2.jpg", caption: "Forever shining bright 🌸", date: "Sunshine" },
-    { src: "assets/photo3.jpg", caption: "My favorite view every single day 🤍", date: "Pure Love" },
-    { src: "assets/photo4.jpg", caption: "Too cute to handle 🎀", date: "Adorable" },
-    { src: "assets/photo5.jpg", caption: "Her sweetest laugh 🌷", date: "Sweet Heart" },
-    { src: "assets/photo6.jpg", caption: "Officially 17 and gorgeous 🎂", date: "Sweet Seventeen" },
-    { src: "assets/photo7.jpg", caption: "Always effortlessly beautiful 💫", date: "Grace" },
-    { src: "assets/photo8.jpg", caption: "The birthday princess 👑", date: "Special Day" }
+    { src: "assets/album/senyum-nanaa.jpg", caption: "The sweetest smile 🌷", alt: "Nanaa tersenyum dengan tangan di pipi dan bingkai hijau", position: "50% 42%" },
+    { src: "assets/album/kacamata-nanaa.jpg", caption: "My favorite kind of magic ✨", alt: "Nanaa memakai kacamata dengan latar tirai cokelat", position: "55% 50%" },
+    { src: "assets/album/bunga-nanaa.jpg", caption: "Pretty in every moment 🌸", alt: "Potret Nanaa dengan hiasan bunga di rambut", position: "50% 25%" },
+    { src: "assets/album/tatapan-nanaa.jpg", caption: "My favorite view 🤍", alt: "Nanaa menatap kamera di depan dinding bata", position: "51% 50%" },
+    { src: "assets/album/hati-nanaa.jpg", caption: "A little love, a little sparkle 💗", alt: "Nanaa dengan filter hati merah muda", position: "50% 42%" },
+    { src: "assets/album/gemas-nanaa.jpg", caption: "Too cute to handle 🐾", alt: "Nanaa berpose dengan filter telinga dan hidung anjing", position: "50% 36%" },
+    { src: "assets/album/piksel-nanaa.jpg", caption: "You make my days brighter ✨", alt: "Nanaa memakai filter kacamata piksel", position: "64% 50%" },
+    { src: "assets/album/kolase-nanaa.jpg", caption: "Every version of you 🎀", alt: "Kolase empat potret Nanaa dengan jepit rambut", fit: "contain", position: "50% 50%" }
   ],
   memoriesButton: "A VIDEO FOR YOU ▶",
 

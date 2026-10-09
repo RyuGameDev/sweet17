@@ -408,6 +408,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (config.coverButton) btnReadLetter.querySelector('.btn-text').textContent = config.coverButton;
 
   const photos = config.photos || [];
+
+  function applyPhotoFraming(card, photo) {
+    card.style.setProperty('--photo-position', photo.position || '50% 50%');
+    card.style.setProperty('--photo-fit', photo.fit === 'contain' ? 'contain' : 'cover');
+    card.querySelector('img').alt = photo.alt || photo.caption || 'Memory';
+  }
+
   if (photos.length >= 6) {
     const leftAngles = [-6, 4, -4];
     for (let i = 0; i < 3; i++) {
@@ -416,6 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.style.setProperty('--rot', `${leftAngles[i]}deg`);
       card.style.animationDelay = `${i * 0.8}s`;
       card.innerHTML = `<img src="${photos[i].src}" alt="Memory" loading="lazy" decoding="async">`;
+      applyPhotoFraming(card, photos[i]);
       card.addEventListener('click', () => openLightbox(i));
       coverPolaroidsLeft.appendChild(card);
     }
@@ -427,6 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.style.setProperty('--rot', `${rightAngles[i - 3]}deg`);
       card.style.animationDelay = `${(i - 3) * 0.9}s`;
       card.innerHTML = `<img src="${photos[i].src}" alt="Memory" loading="lazy" decoding="async">`;
+      applyPhotoFraming(card, photos[i]);
       card.addEventListener('click', () => openLightbox(i));
       coverPolaroidsRight.appendChild(card);
     }
@@ -605,6 +614,8 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div class="polaroid-caption">${photo.caption || 'Sweet Memory 🤍'}</div>
     `;
+
+    applyPhotoFraming(card.querySelector('.polaroid-photo-box'), photo);
 
     card.addEventListener('click', () => openLightbox(idx));
     polaroidGrid.appendChild(card);
@@ -808,6 +819,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!photos[index]) return;
     activeLightboxIndex = index;
     lightboxImg.src = photos[index].src;
+    lightboxImg.alt = photos[index].alt || photos[index].caption || 'Memory';
     lightboxCaption.textContent = photos[index].caption || '';
     lightboxModal.classList.add('active');
   }
