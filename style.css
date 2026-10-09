@@ -190,7 +190,7 @@ html, body {
 .app-screen.active {
   display: flex;
   opacity: 1;
-  transform: scale(1) translateY(0);
+  transform: none;
 }
 
 #screen-memories.active {
@@ -405,16 +405,17 @@ html, body {
 }
 
 .countdown-grid {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
+  max-width: 540px;
   gap: 20px;
-  margin-bottom: 36px;
-  flex-wrap: wrap;
+  margin: 0 auto 36px;
 }
 
 .countdown-card {
-  width: 120px;
+  min-width: 0;
+  width: 100%;
   height: 120px;
   background: rgba(25, 18, 42, 0.7);
   backdrop-filter: blur(16px);
@@ -440,6 +441,7 @@ html, body {
   font-weight: 600;
   color: #fff;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
   text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
@@ -968,7 +970,7 @@ html, body {
 
 .polaroid-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   column-gap: 30px; /* Jarak kiri-kanan 30px */
   row-gap: 24px;
   margin-bottom: 34px;
@@ -976,6 +978,7 @@ html, body {
 }
 
 .polaroid-card {
+  min-width: 0;
   background: #ffffff;
   padding: 6px 6px 18px 6px;
   border-radius: 4px;
@@ -1076,18 +1079,20 @@ html, body {
   line-height: 1.2;
 }
 
-.polaroid-card:hover {
-  transform: scale(1.07) rotate(0deg) translateY(-6px);
-  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.7), 0 0 25px rgba(245, 130, 174, 0.35);
-  z-index: 10;
-}
+@media (hover: hover) and (pointer: fine) {
+  .polaroid-card:hover {
+    transform: scale(1.07) rotate(0deg) translateY(-6px);
+    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.7), 0 0 25px rgba(245, 130, 174, 0.35);
+    z-index: 10;
+  }
 
-.polaroid-card:hover .polaroid-sticker-wrapper {
-  transform: scale(1.15);
-}
+  .polaroid-card:hover .polaroid-sticker-wrapper {
+    transform: scale(1.15);
+  }
 
-.polaroid-card:hover .polaroid-photo-box img {
-  transform: scale(1.05);
+  .polaroid-card:hover .polaroid-photo-box img {
+    transform: scale(1.05);
+  }
 }
 
 /* ==========================================================================
@@ -1428,8 +1433,13 @@ html, body {
 .music-floating-badge.playing .equalizer-bars span:nth-child(4) { animation-delay: 0.4s; height: 9px; }
 
 @keyframes eqBounce {
-  0% { height: 2px; }
-  100% { height: 10px; }
+  0% { transform: scaleY(0.25); }
+  100% { transform: scaleY(1); }
+}
+
+.letter-sound-indicator .bar,
+.equalizer-bars span {
+  transform-origin: center bottom;
 }
 
 .badge-play-btn {
@@ -1697,12 +1707,25 @@ html, body {
   }
   
   .polaroid-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px), (max-height: 500px) and (pointer: coarse) {
+  .app-screen {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 28px 16px calc(90px + env(safe-area-inset-bottom, 0px));
+  }
+  .app-screen > .screen-content {
+    flex-shrink: 0;
+    margin-block: auto;
+  }
+  #screen-cover {
+    overflow-y: auto;
+  }
+
   .title-line-1 { font-size: 42px; }
   .title-line-2.italic-serif { font-size: 34px; }
   
@@ -1713,20 +1736,37 @@ html, body {
   .morph-title { font-size: 44px; }
   
   .countdown-card {
-    width: 80px;
     height: 85px;
     border-radius: 16px;
   }
   
-  .count-number { font-size: 32px; }
-  .count-label { font-size: 9px; }
+  .count-number { font-size: clamp(26px, 8vw, 32px); }
+  .count-label { font-size: 9px; letter-spacing: 0.14em; }
   
-  .countdown-grid { gap: 12px; }
+  .countdown-grid { max-width: 380px; gap: clamp(8px, 2.5vw, 12px); }
+  .hero-subtitle { margin-bottom: 30px; }
+  .sparkle-tag { font-size: 11px; letter-spacing: 0.18em; }
+  .btn-primary { max-width: 100%; padding: 16px 24px; font-size: 12px; }
+
+  /* One scroll surface on phones: swiping beside the letter also works. */
+  #screen-letter {
+    overflow-y: auto;
+    padding: 28px 16px calc(100px + env(safe-area-inset-bottom, 0px));
+  }
+  #screen-letter.active { display: block; }
+  .letter-layout {
+    height: auto;
+    max-height: none;
+    gap: 16px;
+  }
+  .letter-card-container { flex: none; margin: 0; }
   
   .letter-card { 
     padding: 18px 16px; 
     border-radius: 20px;
-    max-height: calc(100dvh - 220px);
+    height: auto;
+    min-height: 240px;
+    max-height: none;
   }
   .letter-header-bar {
     padding-bottom: 10px;
@@ -1739,13 +1779,16 @@ html, body {
   .letter-body { 
     font-size: 14px; 
     line-height: 1.7; 
-    padding-right: 6px;
+    flex: none;
+    overflow: visible;
+    padding-right: 0;
+    overflow-wrap: anywhere;
   }
   .typed-text-flow p {
     margin-bottom: 12px;
   }
   .letter-action {
-    margin-bottom: 20px;
+    margin: 4px 0 0;
   }
   
   /* Compact mobile album gallery with spacious horizontal distance */
@@ -1754,7 +1797,7 @@ html, body {
     padding: 0 16px;
   }
   .polaroid-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 30px; /* Jarak kiri-kanan 30px sesuai permintaan */
     row-gap: 22px;
     margin-bottom: 24px;
@@ -1793,9 +1836,52 @@ html, body {
   .wishes-text-content { font-size: 15px; }
   
   .music-floating-badge {
-    bottom: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     right: 16px;
     padding: 6px 12px;
+  }
+
+  .birthday-garland { gap: 4px; }
+  .garland-flag { min-width: 0; width: 20px; height: 28px; font-size: 11px; }
+  .garland-item { font-size: 16px; }
+  .section-subtitle { line-height: 1.7; letter-spacing: 0.1em; }
+  .lightbox-modal { height: 100%; height: 100dvh; }
+  .lightbox-content { max-height: calc(100dvh - 110px); overflow-y: auto; padding-top: 44px; }
+  .lightbox-close { top: 0; }
+  .lightbox-polaroid { padding: 10px 10px 20px; }
+  .lightbox-polaroid img { max-height: calc(100dvh - 300px); object-fit: contain; }
+}
+
+/* Keep the decorations; avoid repainting large blurred layers on touch devices. */
+@media (max-width: 768px), (pointer: coarse) {
+  .ambient-glow {
+    animation: none;
+    filter: none;
+    -webkit-filter: none;
+    will-change: auto;
+  }
+  .glass-panel,
+  .countdown-card,
+  .btn-primary,
+  .music-floating-badge {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .lightbox-backdrop { backdrop-filter: none; }
+  .polaroid-card .bday-sticker-img { animation-play-state: paused; }
+  .polaroid-card.is-visible .bday-sticker-img { animation-play-state: running; }
+  .app-screen.is-scrolling *,
+  .app-screen.is-scrolling *::before,
+  .app-screen.is-scrolling *::after {
+    animation-play-state: paused !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
 

@@ -6,6 +6,10 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const config = window.HBD_CONFIG || {};
+  const mobileEffects = window.matchMedia('(max-width: 768px), (pointer: coarse)');
+  const mobileLetter = window.matchMedia('(max-width: 768px), (max-height: 500px) and (pointer: coarse)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let currentScreen = 'countdown';
 
   // ------------------------------------------------------------------
   // 1. STAR & AMBIENT CANVAS PARTICLES
@@ -15,15 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
   let width, height;
   let stars = [];
   let floatingHearts = [];
+  let ambientFrame = null;
+  let lastAmbientPaint = 0;
 
   function resizeCanvas() {
+    if (width === window.innerWidth && height === window.innerHeight) return;
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
   }
-  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    syncAmbientAnimation();
+  }, { passive: true });
   resizeCanvas();
 
-  // Pre-rendered heart sprite offscreen for 60fps GPU acceleration
+  // Reuse a small heart sprite instead of drawing its path every frame.
   const heartCanvas = document.createElement('canvas');
   heartCanvas.width = 36;
   heartCanvas.height = 36;
@@ -50,8 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
       this.isSparkle = Math.random() < 0.22;
       this.sparkleSize = Math.random() * 4 + 2;
     }
-    update() {
-      this.alpha += this.alphaChange;
+    update(step = 1) {
+      this.alpha += this.alphaChange * step;
       if (this.alpha <= 0.1 || this.alpha >= 0.9) {
         this.alphaChange = -this.alphaChange;
       }
@@ -92,9 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
       this.speedX = (Math.random() - 0.5) * 0.35;
       this.alpha = Math.random() * 0.25 + 0.1;
     }
-    update() {
-      this.y -= this.speedY;
-      this.x += this.speedX;
+    update(step = 1) {
+      this.y -= this.speedY * step;
+      this.x += this.speedX * step;
       if (this.y < -30) this.reset();
     }
     draw() {
@@ -103,16 +113,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  for (let i = 0; i < 90; i++) stars.push(new Star());
-  for (let i = 0; i < 18; i++) floatingHearts.push(new AmbientHeart());
+  for (let i = 0; i < (mobileEffects.matches ? 48 : 90); i++) stars.push(new Star());
+  for (let i = 0; i < (mobileEffects.matches ? 8 : 18); i++) floatingHearts.push(new AmbientHeart());
 
-  function animateCanvas() {
+  function drawAmbient(step = 0) {
     ctx.clearRect(0, 0, width, height);
-    stars.forEach(s => { s.update(); s.draw(); });
-    floatingHearts.forEach(h => { h.update(); h.draw(); });
-    requestAnimationFrame(animateCanvas);
+    stars.forEach(s => { if (step) s.update(step); s.draw(); });
+    floatingHearts.forEach(h => { if (step) h.update(step); h.draw(); });
   }
-  requestAnimationFrame(animateCanvas);
+
+  function animateCanvas(timestamp) {
+    const interval = mobileEffects.matches ? 1000 / 30 : 1000 / 60;
+    const elapsed = timestamp - lastAmbientPaint;
+    if (elapsed >= interval) {
+      drawAmbient(Math.min(elapsed / (1000 / 60), 2));
+      lastAmbientPaint = timestamp - (elapsed % interval);
+    }
+    ambientFrame = requestAnimationFrame(animateCanvas);
+  }
+
+  function syncAmbientAnimation() {
+    cancelAnimationFrame(ambientFrame);
+    ambientFrame = null;
+    if (document.hidden) return;
+    drawAmbient();
+    // The stars remain visible while reading and scrolling; no full-screen repaints.
+    const readingOnMobile = mobileEffects.matches && ['letter', 'memories'].includes(currentScreen);
+    if (!reducedMotion.matches && !readingOnMobile) {
+      lastAmbientPaint = performance.now();
+      ambientFrame = requestAnimationFrame(animateCanvas);
+    }
+  }
+
+  document.addEventListener('visibilitychange', syncAmbientAnimation);
+  mobileEffects.addEventListener('change', syncAmbientAnimation);
+  reducedMotion.addEventListener('change', syncAmbientAnimation);
+  syncAmbientAnimation();
 
   // ------------------------------------------------------------------
   // 2. AUDIO & MUSIC BADGE CONTROLLER
@@ -175,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.removeEventListener('touchstart', firstInteractionListener);
   }
   document.addEventListener('click', firstInteractionListener);
-  document.addEventListener('touchstart', firstInteractionListener);
+  document.addEventListener('touchstart', firstInteractionListener, { passive: true });
 
   // ------------------------------------------------------------------
   // 3. SCREEN MANAGER & BUTTON LIQUID LEFT-TO-RIGHT WIPE
@@ -191,7 +227,15 @@ document.addEventListener('DOMContentLoaded', () => {
     closing: document.getElementById('screen-closing')
   };
 
-  let currentScreen = 'countdown';
+  Object.values(screens).forEach(screen => {
+    let scrollIdleTimer;
+    screen.addEventListener('scroll', () => {
+      if (!mobileEffects.matches) return;
+      screen.classList.add('is-scrolling');
+      clearTimeout(scrollIdleTimer);
+      scrollIdleTimer = setTimeout(() => screen.classList.remove('is-scrolling'), 160);
+    }, { passive: true });
+  });
 
   // Helper for button click: fills from left to right, then navigates
   function onGlassBtnClick(btn, actionCallback) {
@@ -205,6 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function goToScreen(screenKey) {
     if (!screens[screenKey]) return;
+
+    if (currentScreen === 'letter' && screenKey !== 'letter') {
+      stopTypewriter();
+    }
     
     const videoElem = document.getElementById('special-video');
     if (currentScreen === 'video' && videoElem && !videoElem.paused) {
@@ -215,6 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     screens[screenKey].classList.add('active');
     currentScreen = screenKey;
     screens[screenKey].scrollTop = 0;
+    syncAmbientAnimation();
 
     if (screenKey === 'letter') {
       startTypewriter();
@@ -367,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'cover-polaroid-item';
       card.style.setProperty('--rot', `${leftAngles[i]}deg`);
       card.style.animationDelay = `${i * 0.8}s`;
-      card.innerHTML = `<img src="${photos[i].src}" alt="Memory" loading="lazy">`;
+      card.innerHTML = `<img src="${photos[i].src}" alt="Memory" loading="lazy" decoding="async">`;
       card.addEventListener('click', () => openLightbox(i));
       coverPolaroidsLeft.appendChild(card);
     }
@@ -378,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'cover-polaroid-item';
       card.style.setProperty('--rot', `${rightAngles[i - 3]}deg`);
       card.style.animationDelay = `${(i - 3) * 0.9}s`;
-      card.innerHTML = `<img src="${photos[i].src}" alt="Memory" loading="lazy">`;
+      card.innerHTML = `<img src="${photos[i].src}" alt="Memory" loading="lazy" decoding="async">`;
       card.addEventListener('click', () => openLightbox(i));
       coverPolaroidsRight.appendChild(card);
     }
@@ -407,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const letterBodyElem = document.querySelector('.letter-body');
   let userManuallyScrolled = false;
+  let letterScrollTimer = null;
 
   if (letterBodyElem) {
     letterBodyElem.addEventListener('scroll', () => {
@@ -416,9 +466,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function scrollLetterToBottom() {
-    if (letterBodyElem && !userManuallyScrolled) {
-      letterBodyElem.scrollTop = letterBodyElem.scrollHeight;
-    }
+    // Phones use page scrolling, so typing must never pull the reader down the page.
+    if (mobileLetter.matches || userManuallyScrolled || letterScrollTimer !== null) return;
+    letterScrollTimer = setTimeout(() => {
+      letterScrollTimer = null;
+      if (currentScreen === 'letter' && !mobileLetter.matches && !userManuallyScrolled) {
+        letterBodyElem.scrollTop = letterBodyElem.scrollHeight;
+      }
+    }, 120);
+  }
+
+  function stopTypewriter() {
+    clearTimeout(typewriterInterval);
+    clearTimeout(letterScrollTimer);
+    typewriterInterval = null;
+    letterScrollTimer = null;
+    typewriterActive = false;
   }
 
   function startTypewriter() {
@@ -429,12 +492,20 @@ document.addEventListener('DOMContentLoaded', () => {
     letterTextElem.innerHTML = '';
     typingCursor.style.display = 'inline-block';
 
+    if (reducedMotion.matches) {
+      finishTypewriter();
+      return;
+    }
+
     let pIndex = 0;
     let charIndex = 0;
     let currentP = document.createElement('p');
+    let currentText = document.createTextNode('');
+    currentP.appendChild(currentText);
     letterTextElem.appendChild(currentP);
 
     function typeChar() {
+      if (currentScreen !== 'letter') return;
       if (pIndex >= paragraphs.length) {
         finishTypewriter();
         return;
@@ -442,7 +513,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const pText = paragraphs[pIndex];
       if (charIndex < pText.length) {
-        currentP.textContent += pText[charIndex];
+        currentText.appendData(pText[charIndex]);
         charIndex++;
         scrollLetterToBottom();
         const char = pText[charIndex - 1];
@@ -455,6 +526,8 @@ document.addEventListener('DOMContentLoaded', () => {
         charIndex = 0;
         if (pIndex < paragraphs.length) {
           currentP = document.createElement('p');
+          currentText = document.createTextNode('');
+          currentP.appendChild(currentText);
           letterTextElem.appendChild(currentP);
           scrollLetterToBottom();
           typewriterInterval = setTimeout(typeChar, 300);
@@ -497,6 +570,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (config.memoriesButton) document.getElementById('memories-btn-text').textContent = config.memoriesButton;
 
   const tiltAngles = [-2.2, 2.5, -1.8, 2, 1.8, -2.5, 1.5, -1.8];
+  const polaroidObserver = 'IntersectionObserver' in window
+    ? new IntersectionObserver(entries => {
+      entries.forEach(entry => entry.target.classList.toggle('is-visible', entry.isIntersecting));
+    }, { root: screens.memories, threshold: 0.05 })
+    : null;
   const stickers = [
     { main: 'assets/stickers/balloons.svg', mainPos: 'top-left', sub: 'assets/stickers/gift.svg', subPos: 'bottom-right' },
     { main: 'assets/stickers/cake.svg', mainPos: 'top-right', sub: 'assets/stickers/party_hat.svg', subPos: 'bottom-left' },
@@ -524,13 +602,15 @@ document.addEventListener('DOMContentLoaded', () => {
         <img src="${st.sub}" class="bday-sticker-img" alt="Birthday Decoration" loading="lazy">
       </div>
       <div class="polaroid-photo-box">
-        <img src="${photo.src}" alt="${photo.caption || 'Memory'}" loading="lazy">
+        <img src="${photo.src}" alt="${photo.caption || 'Memory'}" loading="lazy" decoding="async">
       </div>
       <div class="polaroid-caption">${photo.caption || 'Sweet Memory 🤍'}</div>
     `;
 
     card.addEventListener('click', () => openLightbox(idx));
     polaroidGrid.appendChild(card);
+    if (polaroidObserver) polaroidObserver.observe(card);
+    else card.classList.add('is-visible');
   });
 
   btnToVideo.addEventListener('click', () => {
@@ -764,6 +844,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // 13. CONFETTI BURST GENERATOR
   // ------------------------------------------------------------------
   function triggerConfettiBurst(originX, originY, count = 75) {
+    if (reducedMotion.matches) return;
+    if (mobileEffects.matches) count = Math.min(count, 40);
     const colors = ['#f582ae', '#9d71e8', '#ffd166', '#ffffff', '#ff7597', '#ffe3a8'];
     const confettiPieces = [];
 
