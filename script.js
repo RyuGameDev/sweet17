@@ -399,6 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ------------------------------------------------------------------
   const coverPolaroidsLeft = document.getElementById('cover-polaroids-left');
   const coverPolaroidsRight = document.getElementById('cover-polaroids-right');
+  const coverPhotoFan = document.getElementById('cover-photo-fan');
   const btnReadLetter = document.getElementById('btn-read-letter');
 
   if (config.coverTag) document.getElementById('cover-tag').textContent = config.coverTag;
@@ -414,6 +415,24 @@ document.addEventListener('DOMContentLoaded', () => {
     card.style.setProperty('--photo-fit', photo.fit === 'contain' ? 'contain' : 'cover');
     card.querySelector('img').alt = photo.alt || photo.caption || 'Memory';
   }
+
+  // Keep the smiling portrait in the center of the compact cover arrangement.
+  [1, 0, 2].filter(index => photos[index]).forEach(index => {
+    const photo = photos[index];
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'cover-fan-photo';
+    card.setAttribute('aria-label', `Lihat foto: ${photo.caption || 'Memory'}`);
+
+    const img = document.createElement('img');
+    img.src = photo.src;
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    card.appendChild(img);
+    applyPhotoFraming(card, photo);
+    card.addEventListener('click', () => openLightbox(index));
+    coverPhotoFan.appendChild(card);
+  });
 
   if (photos.length >= 6) {
     const leftAngles = [-6, 4, -4];
