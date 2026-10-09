@@ -1748,7 +1748,7 @@ html, body {
   .sparkle-tag { font-size: 11px; letter-spacing: 0.18em; }
   .btn-primary { max-width: 100%; padding: 16px 24px; font-size: 12px; }
 
-  /* One scroll surface on phones: swiping beside the letter also works. */
+  /* Keep the message box bounded; the page can still scroll to its action. */
   #screen-letter {
     overflow-y: auto;
     padding: 28px 16px calc(100px + env(safe-area-inset-bottom, 0px));
@@ -1764,8 +1764,8 @@ html, body {
   .letter-card { 
     padding: 18px 16px; 
     border-radius: 20px;
-    height: auto;
-    min-height: 240px;
+    height: clamp(280px, calc(100vh - 190px), 520px);
+    height: clamp(280px, calc(100svh - 190px), 520px);
     max-height: none;
   }
   .letter-header-bar {
@@ -1779,9 +1779,10 @@ html, body {
   .letter-body { 
     font-size: 14px; 
     line-height: 1.7; 
-    flex: none;
-    overflow: visible;
-    padding-right: 0;
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior-y: auto;
+    padding-right: 6px;
     overflow-wrap: anywhere;
   }
   .typed-text-flow p {

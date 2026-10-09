@@ -7,7 +7,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const config = window.HBD_CONFIG || {};
   const mobileEffects = window.matchMedia('(max-width: 768px), (pointer: coarse)');
-  const mobileLetter = window.matchMedia('(max-width: 768px), (max-height: 500px) and (pointer: coarse)');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let currentScreen = 'countdown';
 
@@ -466,11 +465,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function scrollLetterToBottom() {
-    // Phones use page scrolling, so typing must never pull the reader down the page.
-    if (mobileLetter.matches || userManuallyScrolled || letterScrollTimer !== null) return;
+    // Follow new text inside the card only; leave the outer page to the reader.
+    if (userManuallyScrolled || letterScrollTimer !== null) return;
     letterScrollTimer = setTimeout(() => {
       letterScrollTimer = null;
-      if (currentScreen === 'letter' && !mobileLetter.matches && !userManuallyScrolled) {
+      if (currentScreen === 'letter' && !userManuallyScrolled) {
         letterBodyElem.scrollTop = letterBodyElem.scrollHeight;
       }
     }, 120);
