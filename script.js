@@ -416,9 +416,12 @@ document.addEventListener('DOMContentLoaded', () => {
     card.querySelector('img').alt = photo.alt || photo.caption || 'Memory';
   }
 
-  // Keep the smiling portrait in the center of the compact cover arrangement.
-  [1, 0, 2].filter(index => photos[index]).forEach(index => {
-    const photo = photos[index];
+  // Susunan 3 foto kipas di layar Cover untuk HP/tablet (pose hati di tengah)
+  const coverFanPhotos = (Array.isArray(config.coverPhotos) && config.coverPhotos.length >= 3)
+    ? config.coverPhotos.slice(0, 3)
+    : [1, 0, 2].map(i => photos[i]).filter(Boolean);
+
+  coverFanPhotos.forEach((photo, index) => {
     const card = document.createElement('button');
     card.type = 'button';
     card.className = 'cover-fan-photo';
@@ -430,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
     img.decoding = 'async';
     card.appendChild(img);
     applyPhotoFraming(card, photo);
-    card.addEventListener('click', () => openLightbox(index));
+    card.addEventListener('click', () => openLightbox(index, coverFanPhotos));
     coverPhotoFan.appendChild(card);
   });
 
@@ -833,13 +836,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightboxPrev = document.getElementById('lightbox-prev');
   const lightboxNext = document.getElementById('lightbox-next');
   let activeLightboxIndex = 0;
+  let activeLightboxList = photos;
 
-  function openLightbox(index) {
-    if (!photos[index]) return;
+  function openLightbox(index, photoList = photos) {
+    activeLightboxList = (Array.isArray(photoList) && photoList.length) ? photoList : photos;
+    if (!activeLightboxList[index]) return;
     activeLightboxIndex = index;
-    lightboxImg.src = photos[index].src;
-    lightboxImg.alt = photos[index].alt || photos[index].caption || 'Memory';
-    lightboxCaption.textContent = photos[index].caption || '';
+    lightboxImg.src = activeLightboxList[index].src;
+    lightboxImg.alt = activeLightboxList[index].alt || activeLightboxList[index].caption || 'Memory';
+    lightboxCaption.textContent = activeLightboxList[index].caption || '';
     lightboxModal.classList.add('active');
   }
 
@@ -852,14 +857,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   lightboxPrev.addEventListener('click', (e) => {
     e.stopPropagation();
-    activeLightboxIndex = (activeLightboxIndex - 1 + photos.length) % photos.length;
-    openLightbox(activeLightboxIndex);
+    if (!activeLightboxList.length) return;
+    activeLightboxIndex = (activeLightboxIndex - 1 + activeLightboxList.length) % activeLightboxList.length;
+    openLightbox(activeLightboxIndex, activeLightboxList);
   });
 
   lightboxNext.addEventListener('click', (e) => {
     e.stopPropagation();
-    activeLightboxIndex = (activeLightboxIndex + 1) % photos.length;
-    openLightbox(activeLightboxIndex);
+    if (!activeLightboxList.length) return;
+    activeLightboxIndex = (activeLightboxIndex + 1) % activeLightboxList.length;
+    openLightbox(activeLightboxIndex, activeLightboxList);
   });
 
   document.addEventListener('keydown', (e) => {

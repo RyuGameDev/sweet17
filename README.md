@@ -63,6 +63,10 @@ hbd/
 - Masukkan file lagu romantis favoritmu ke dalam folder `assets/`.
 - Beri nama: `music.mp3`
 
+### 4. Mengganti 3 Foto Kipas Layar Cover (Tampilan HP)
+- Masukkan 3 foto pilihan ke dalam folder `assets/cover/` (misal: `pose-pipi.jpg`, `pose-hati.jpg`, `pose-dagu.jpg`).
+- Foto diatur di `config.js` pada bagian `coverPhotos` dengan pose tangan hati di tengah agar tidak mengulang foto album.
+
 ---
 
 ## ✍️ Cara Mengubah Teks, Nama & Tanggal Countdown

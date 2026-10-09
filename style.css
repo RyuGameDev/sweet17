@@ -784,6 +784,28 @@ html, body {
   transform: translateY(10px) rotate(12deg);
 }
 
+.cover-fan-photo {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.cover-fan-photo:hover,
+.cover-fan-photo:focus-visible {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.6), 0 0 20px rgba(245, 130, 174, 0.35);
+  z-index: 5;
+}
+
+.cover-fan-photo:nth-child(1):hover {
+  transform: translateY(2px) rotate(-14deg) scale(1.05);
+}
+
+.cover-fan-photo:nth-child(2):hover {
+  transform: translateY(-6px) scale(1.06);
+}
+
+.cover-fan-photo:nth-child(3):hover {
+  transform: translateY(2px) rotate(14deg) scale(1.05);
+}
+
 .cover-fan-photo:focus-visible {
   outline: 2px solid var(--accent-rose);
   outline-offset: 5px;

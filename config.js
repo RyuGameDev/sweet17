@@ -42,8 +42,32 @@ window.HBD_CONFIG = {
   coverTag: "✧ SWEET SEVENTEEN SPECIAL ✧",
   coverTitle1: "Your",
   coverTitle2: "Special Day",
-  coverSubtitle: "Dibuat dengan cinta, khusus untukmu",
-  coverButton: "✉ READ MY LETTER 💌",
+  coverSubtitle: "Dibuat dengan cinta, khusus untuk nana",
+  coverButton: "READ MY LETTER 💌",
+
+  // 3 Foto khusus untuk susunan kipas di layar Cover (tampilan HP / mobile)
+  // Susunan: kiri (pose pipi), tengah (pose tangan berbentuk hati), kanan (pose dagu)
+  // 'position' mengatur titik fokus potongan foto agar wajah & pose tetap jelas
+  coverPhotos: [
+    {
+      src: "assets/cover/pose-pipi.jpg",
+      caption: "My prettiest girl 🌸",
+      alt: "Nanaa dengan pose manis memegang pipi",
+      position: "50% 18%"
+    },
+    {
+      src: "assets/cover/pose-hati.jpg",
+      caption: "A heart full of love for you 🤍",
+      alt: "Nanaa dengan pose tangan berbentuk hati di tengah",
+      position: "50% 18%"
+    },
+    {
+      src: "assets/cover/pose-dagu.jpg",
+      caption: "Sweetest smile & sweetest soul ✨",
+      alt: "Nanaa dengan pose manis menopang dagu",
+      position: "50% 12%"
+    }
+  ],
 
   // ------------------------------------------------------------------
   // 4. SURAT CINTA / BIRTHDAY LETTER (EFEK TYPEWRITER)
@@ -65,8 +89,8 @@ window.HBD_CONFIG = {
   // ------------------------------------------------------------------
   // Delapan foto pilihan disimpan di assets/album/. Foto kiriman asli tetap ada.
   // position mengatur titik fokus di polaroid; fit: "contain" menampilkan foto utuh.
-  memoriesTitle: "Her Beautiful Moments",
-  memoriesSubtitle: "✧ every smile that brightens up my world ✧",
+  memoriesTitle: "Looks how Beautiful you're",
+  memoriesSubtitle: "✧ every your smile that brightens up my world ✧",
   photos: [
     { src: "assets/album/senyum-nanaa.jpg", caption: "The sweetest smile 🌷", alt: "Nanaa tersenyum dengan tangan di pipi dan bingkai hijau", position: "50% 42%" },
     { src: "assets/album/kacamata-nanaa.jpg", caption: "My favorite kind of magic ✨", alt: "Nanaa memakai kacamata dengan latar tirai cokelat", position: "55% 50%" },
