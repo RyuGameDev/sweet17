@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
   
   <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.1">
 </head>
 <body>
 
@@ -345,7 +345,11 @@
         <span></span><span></span><span></span><span></span>
       </div>
     </div>
-    <button class="badge-play-btn" id="badge-play-toggle" aria-label="Toggle Play">▶</button>
+    <button class="badge-play-btn" id="badge-play-toggle" aria-label="Putar / Jeda Lagu" type="button">
+      <svg class="badge-icon" viewBox="0 0 24 24">
+        <path d="M8 5v14l11-7z" fill="currentColor"/>
+      </svg>
+    </button>
   </div>
 
   <!-- ===================================================================
@@ -409,7 +413,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="config.js"></script>
-  <script src="script.js"></script>
+  <script src="config.js?v=2.1"></script>
+  <script src="script.js?v=2.1"></script>
 </body>
 </html>

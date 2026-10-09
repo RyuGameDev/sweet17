@@ -23,6 +23,20 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
 
+  // Pre-rendered heart sprite offscreen for 60fps GPU acceleration
+  const heartCanvas = document.createElement('canvas');
+  heartCanvas.width = 36;
+  heartCanvas.height = 36;
+  const hCtx = heartCanvas.getContext('2d');
+  hCtx.fillStyle = '#f582ae';
+  hCtx.beginPath();
+  hCtx.moveTo(18, 29);
+  hCtx.bezierCurveTo(9, 21, 3, 14, 3, 9);
+  hCtx.bezierCurveTo(3, 4, 8, 3, 18, 10);
+  hCtx.bezierCurveTo(28, 3, 33, 4, 33, 9);
+  hCtx.bezierCurveTo(33, 14, 27, 21, 18, 29);
+  hCtx.fill();
+
   class Star {
     constructor() {
       this.reset();
@@ -43,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     draw() {
-      ctx.save();
       ctx.globalAlpha = Math.max(0.1, Math.min(1, this.alpha));
       if (this.isSparkle) {
         ctx.fillStyle = '#ffd166';
@@ -64,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
       }
-      ctx.restore();
     }
   }
 
@@ -75,10 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
     reset(initial = false) {
       this.x = Math.random() * width;
       this.y = initial ? Math.random() * height : height + 20;
-      this.size = Math.random() * 11 + 6;
+      this.size = Math.random() * 12 + 8;
       this.speedY = Math.random() * 0.55 + 0.25;
       this.speedX = (Math.random() - 0.5) * 0.35;
-      this.alpha = Math.random() * 0.22 + 0.08;
+      this.alpha = Math.random() * 0.25 + 0.1;
     }
     update() {
       this.y -= this.speedY;
@@ -86,12 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (this.y < -30) this.reset();
     }
     draw() {
-      ctx.save();
       ctx.globalAlpha = this.alpha;
-      ctx.fillStyle = '#f582ae';
-      ctx.font = `${this.size}px serif`;
-      ctx.fillText('❤', this.x, this.y);
-      ctx.restore();
+      ctx.drawImage(heartCanvas, this.x, this.y, this.size, this.size);
     }
   }
 
@@ -104,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     floatingHearts.forEach(h => { h.update(); h.draw(); });
     requestAnimationFrame(animateCanvas);
   }
-  animateCanvas();
+  requestAnimationFrame(animateCanvas);
 
   // ------------------------------------------------------------------
   // 2. AUDIO & MUSIC BADGE CONTROLLER
@@ -120,10 +128,24 @@ document.addEventListener('DOMContentLoaded', () => {
     badgeSongText.textContent = `${config.musicTitle} - ${config.musicArtist || ''}`;
   }
 
+  const svgPlayIcon = `<svg class="badge-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>`;
+  const svgPauseIcon = `<svg class="badge-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor"/></svg>`;
+
+  function updatePlayButtonUI(isPlaying) {
+    if (isPlaying) {
+      musicBadge.classList.add('playing');
+      badgePlayToggle.innerHTML = svgPauseIcon;
+      badgePlayToggle.setAttribute('aria-label', 'Jeda Musik');
+    } else {
+      musicBadge.classList.remove('playing');
+      badgePlayToggle.innerHTML = svgPlayIcon;
+      badgePlayToggle.setAttribute('aria-label', 'Putar Musik');
+    }
+  }
+
   function playAudio() {
     bgAudio.play().then(() => {
-      musicBadge.classList.add('playing');
-      badgePlayToggle.textContent = '⏸';
+      updatePlayButtonUI(true);
       audioInitialized = true;
     }).catch(err => {
       console.log('Audio autoplay prevented:', err);
@@ -132,8 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function pauseAudio() {
     bgAudio.pause();
-    musicBadge.classList.remove('playing');
-    badgePlayToggle.textContent = '▶';
+    updatePlayButtonUI(false);
   }
 
   function toggleAudio() {
@@ -193,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Object.values(screens).forEach(s => s.classList.remove('active'));
     screens[screenKey].classList.add('active');
     currentScreen = screenKey;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    screens[screenKey].scrollTop = 0;
 
     if (screenKey === 'letter') {
       startTypewriter();
@@ -384,9 +405,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const paragraphs = config.letterParagraphs || [];
 
+  const letterBodyElem = document.querySelector('.letter-body');
+  let userManuallyScrolled = false;
+
+  if (letterBodyElem) {
+    letterBodyElem.addEventListener('scroll', () => {
+      const atBottom = letterBodyElem.scrollHeight - letterBodyElem.scrollTop - letterBodyElem.clientHeight < 35;
+      userManuallyScrolled = !atBottom;
+    }, { passive: true });
+  }
+
+  function scrollLetterToBottom() {
+    if (letterBodyElem && !userManuallyScrolled) {
+      letterBodyElem.scrollTop = letterBodyElem.scrollHeight;
+    }
+  }
+
   function startTypewriter() {
     if (typewriterActive) return;
     typewriterActive = true;
+    userManuallyScrolled = false;
+    if (letterBodyElem) letterBodyElem.scrollTop = 0;
     letterTextElem.innerHTML = '';
     typingCursor.style.display = 'inline-block';
 
@@ -405,6 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (charIndex < pText.length) {
         currentP.textContent += pText[charIndex];
         charIndex++;
+        scrollLetterToBottom();
         const char = pText[charIndex - 1];
         let delay = 32;
         if (char === '.' || char === '!' || char === '?') delay = 220;
@@ -416,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (pIndex < paragraphs.length) {
           currentP = document.createElement('p');
           letterTextElem.appendChild(currentP);
+          scrollLetterToBottom();
           typewriterInterval = setTimeout(typeChar, 300);
         } else {
           finishTypewriter();
@@ -436,6 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     typingCursor.style.display = 'none';
     btnToMemories.classList.add('glowing-btn');
+    scrollLetterToBottom();
   }
 
   btnToMemories.addEventListener('click', () => {
