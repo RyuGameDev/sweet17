@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+  <!-- Cake Base Plate -->
+  <ellipse cx="32" cy="56" rx="26" ry="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5" />
+
+  <!-- Bottom Tier -->
+  <path d="M12,42 L12,52 C12,55 20,57 32,57 C44,57 52,55 52,52 L52,42 Z" fill="#f472b6" />
+  <!-- Bottom Frosting drips -->
+  <path d="M12,42 C16,46 20,41 24,45 C28,41 32,46 36,42 C40,46 44,41 48,45 C50,43 52,42 52,42 C52,38 44,36 32,36 C20,36 12,38 12,42 Z" fill="#fdf2f8" />
+
+  <!-- Top Tier -->
+  <path d="M18,28 L18,37 C18,39 24,41 32,41 C40,41 46,39 46,37 L46,28 Z" fill="#fb7185" />
+  <!-- Top Frosting -->
+  <ellipse cx="32" cy="28" rx="14" ry="4" fill="#ffffff" />
+  <path d="M18,28 C21,31 24,28 28,31 C32,28 36,31 40,28 C43,30 46,28 46,28 Z" fill="#fdf2f8" />
+
+  <!-- Candle -->
+  <rect x="30" y="14" width="4" height="12" rx="1" fill="#38bdf8" />
+  <line x1="32" y1="11" x2="32" y2="14" stroke="#334155" stroke-width="1" />
+  <!-- Candle Flame -->
+  <path d="M32,4 C34,7 36,9 34,12 C33,13 31,13 30,12 C28,9 30,7 32,4 Z" fill="#f59e0b" />
+  <ellipse cx="32" cy="10" rx="1.5" ry="2" fill="#fef08a" />
+
+  <!-- Cherries / berries on cake -->
+  <circle cx="23" cy="26" r="2.5" fill="#e11d48" />
+  <circle cx="41" cy="26" r="2.5" fill="#e11d48" />
+</svg>

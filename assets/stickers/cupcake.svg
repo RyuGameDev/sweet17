@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+  <!-- Wrapper Base -->
+  <polygon points="18,36 22,58 42,58 46,36" fill="#fbcfe8" stroke="#f472b6" stroke-width="1.5" />
+  <line x1="26" y1="36" x2="28" y2="58" stroke="#f472b6" stroke-width="1" />
+  <line x1="32" y1="36" x2="32" y2="58" stroke="#f472b6" stroke-width="1" />
+  <line x1="38" y1="36" x2="36" y2="58" stroke="#f472b6" stroke-width="1" />
+
+  <!-- Frosting Swirl -->
+  <path d="M14,36 C14,31 20,28 26,30 C27,24 35,22 40,26 C46,24 50,30 50,36 C50,40 14,40 14,36 Z" fill="url(#frostingGrad)" />
+  <path d="M22,26 C24,20 32,18 36,22 C40,20 44,24 42,28 C34,26 26,24 22,26 Z" fill="#fdf2f8" />
+  
+  <!-- Cherry / Strawberry on top -->
+  <circle cx="32" cy="14" r="6" fill="#e11d48" />
+  <ellipse cx="30" cy="12" rx="1.5" ry="2.5" fill="#fda4af" />
+  <path d="M33,9 Q36,4 42,6" fill="none" stroke="#15803d" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- Sprinkles -->
+  <line x1="20" y1="34" x2="24" y2="33" stroke="#facc15" stroke-width="2" stroke-linecap="round" />
+  <line x1="30" y1="33" x2="34" y2="35" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" />
+  <line x1="42" y1="34" x2="44" y2="31" stroke="#a855f7" stroke-width="2" stroke-linecap="round" />
+
+  <defs>
+    <linearGradient id="frostingGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#fbcfe8" />
+      <stop offset="100%" stop-color="#f472b6" />
+    </linearGradient>
+  </defs>
+</svg>

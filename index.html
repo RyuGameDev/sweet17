@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Her Special Day is Coming ✨</title>
+  <meta name="description" content="A special birthday surprise website created with love.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Particle & Stars Canvas -->
+  <canvas id="stars-canvas"></canvas>
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Audio Element -->
+  <audio id="bg-audio" preload="auto" loop></audio>
+
+
+  <!-- ===================================================================
+       SCREEN 1: COUNTDOWN TIMER (MENGHITUNG HARI)
+       =================================================================== -->
+  <section id="screen-countdown" class="app-screen active">
+    <div class="screen-content text-center fade-in-up">
+      <div class="sparkle-tag" id="countdown-tag">✧ MENGHITUNG HARI ✧</div>
+      
+      <h1 class="hero-title">
+        <span class="title-line-1" id="countdown-title-1">Her Special Day</span>
+        <span class="title-line-2 italic-serif" id="countdown-title-2">is Coming</span>
+      </h1>
+      
+      <p class="hero-subtitle" id="countdown-subtitle">Sesuatu yang indah sedang menunggu untukmu ✨</p>
+      
+      <!-- Countdown Cards -->
+      <div class="countdown-grid" id="countdown-cards">
+        <div class="countdown-card">
+          <div class="count-number" id="count-days">00</div>
+          <div class="count-label">HARI</div>
+        </div>
+        <div class="countdown-card">
+          <div class="count-number" id="count-hours">00</div>
+          <div class="count-label">JAM</div>
+        </div>
+        <div class="countdown-card">
+          <div class="count-number" id="count-minutes">00</div>
+          <div class="count-label">MENIT</div>
+        </div>
+        <div class="countdown-card">
+          <div class="count-number" id="count-seconds">00</div>
+          <div class="count-label">DETIK</div>
+        </div>
+      </div>
+      
+      <!-- Status Notice -->
+      <div class="countdown-status" id="countdown-status">
+        ⏳ Beberapa detik lagi... ⏳
+      </div>
+      
+      <!-- Action Button -->
+      <div class="countdown-action">
+        <button id="btn-countdown" class="btn-primary locked" disabled>
+          <span class="btn-text">TUNGGU SAMPAI WAKTUNYA 🔒</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       SCREEN 2: GIFT BOX (ADA SESUATU UNTUKMU)
+       =================================================================== -->
+  <section id="screen-gift" class="app-screen">
+    <div class="screen-content text-center">
+      <div class="sparkle-tag" id="gift-tag">✧ ADA SESUATU UNTUKMU ✧</div>
+      
+      <div class="gift-box-wrapper" id="gift-trigger">
+        <div class="gift-sparkles-orbit">
+          <span class="orbit-sparkle s1">✦</span>
+          <span class="orbit-sparkle s2">✧</span>
+          <span class="orbit-sparkle s3">✦</span>
+          <span class="orbit-sparkle s4">✧</span>
+        </div>
+        
+        <div class="gift-box" id="gift-box-elem">
+          <!-- Lid with Ribbon & Bow -->
+          <div class="gift-lid" id="gift-lid">
+            <div class="gift-bow">
+              <div class="bow-knot"></div>
+              <div class="bow-loop left"></div>
+              <div class="bow-loop right"></div>
+              <div class="bow-ribbon left"></div>
+              <div class="bow-ribbon right"></div>
+            </div>
+            <div class="lid-ribbon"></div>
+          </div>
+          
+          <!-- Box Body with Cross Ribbon -->
+          <div class="gift-body">
+            <div class="box-ribbon-v"></div>
+            <div class="box-ribbon-h"></div>
+            <div class="box-glow"></div>
+          </div>
+        </div>
+      </div>
+      
+      <p class="gift-hint pulsate" id="gift-hint">✨ Klik untuk membuka hadiahmu ✨</p>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       SCREEN 3: COVER / SPECIAL DAY HERO
+       =================================================================== -->
+  <section id="screen-cover" class="app-screen">
+    <!-- Left Floating Polaroids -->
+    <div class="floating-polaroids left" id="cover-polaroids-left">
+      <!-- Polaroids injected by JS -->
+    </div>
+
+    <!-- Center Content -->
+    <div class="screen-content text-center cover-center">
+      <div class="sparkle-tag" id="cover-tag">✧ A LOVE LETTER FOR YOU ✧</div>
+      
+      <h1 class="cover-hero-title">
+        <span class="cover-line-1" id="cover-title-1">Your</span>
+        <span class="cover-line-2" id="cover-title-2">Special Day</span>
+      </h1>
+      
+      <p class="cover-subtitle" id="cover-subtitle">Dibuat dengan cinta, khusus untukmu</p>
+      
+      <div class="cover-action">
+        <button id="btn-read-letter" class="btn-primary glowing-btn">
+          <span class="btn-text">✉ READ MY LETTER 💌</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Floating Polaroids -->
+    <div class="floating-polaroids right" id="cover-polaroids-right">
+      <!-- Polaroids injected by JS -->
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       SCREEN 4: LOVE LETTER (TYPEWRITER EFFECT)
+       =================================================================== -->
+  <section id="screen-letter" class="app-screen">
+    <div class="screen-content letter-layout text-center">
+      <h2 class="section-title" id="letter-title">Happy Birthday</h2>
+      
+      <!-- Letter Glass Card -->
+      <div class="letter-card-container">
+        <div class="letter-card glass-panel" id="letter-card">
+          <!-- Card Header Bar -->
+          <div class="letter-header-bar">
+            <div class="letter-sound-indicator">
+              <span class="bar b1"></span>
+              <span class="bar b2"></span>
+              <span class="bar b3"></span>
+            </div>
+            <div class="letter-greeting" id="letter-greeting">HAPPY BIRTHDAY SAYANGKUUU 🤍</div>
+          </div>
+          
+          <!-- Letter Typed Content -->
+          <div class="letter-body text-left">
+            <div id="letter-text" class="typed-text-flow"></div>
+            <span class="typing-cursor" id="typing-cursor">|</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="letter-action">
+        <button id="btn-to-memories" class="btn-primary glowing-btn">
+          <span class="btn-text" id="letter-btn-text">HER MOMENTS ➜</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       SCREEN 5: HER BEAUTIFUL MOMENTS (POLAROID GALLERY)
+       =================================================================== -->
+  <section id="screen-memories" class="app-screen">
+    <div class="screen-content gallery-layout text-center">
+      <!-- Festive Birthday Garland Banner -->
+      <div class="birthday-garland">
+        <span class="garland-item">🎈</span>
+        <span class="garland-flag">H</span>
+        <span class="garland-flag">B</span>
+        <span class="garland-flag">D</span>
+        <span class="garland-item">🎂</span>
+        <span class="garland-flag">S</span>
+        <span class="garland-flag">P</span>
+        <span class="garland-flag">E</span>
+        <span class="garland-flag">C</span>
+        <span class="garland-flag">I</span>
+        <span class="garland-flag">A</span>
+        <span class="garland-flag">L</span>
+        <span class="garland-item">✨</span>
+      </div>
+
+      <h2 class="section-title" id="memories-title">Her Beautiful Moments</h2>
+      <p class="section-subtitle" id="memories-subtitle">✧ every smile that brightens up my world ✧</p>
+      
+      <!-- 8 Polaroids Grid -->
+      <div class="polaroid-grid" id="polaroid-grid">
+        <!-- Injected dynamically from config.js -->
+      </div>
+      
+      <div class="memories-action">
+        <button id="btn-to-video" class="btn-primary glowing-btn">
+          <span class="btn-text" id="memories-btn-text">A VIDEO FOR YOU ▶</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       SCREEN 6: A MOMENT FOR YOU (VIDEO MESSAGE)
+       =================================================================== -->
+  <section id="screen-video" class="app-screen">
+    <div class="screen-content video-layout text-center">
+      <h2 class="section-title" id="video-title">A Moment For You</h2>
+      <p class="section-subtitle" id="video-subtitle">✧ a special video message ✧</p>
+      
+      <!-- Custom Video Player Container -->
+      <div class="video-player-frame glass-panel">
+        <div class="video-container" id="video-wrapper">
+          <video id="special-video" playsinline preload="metadata">
+            <source src="assets/video.mp4" type="video/mp4">
+            Browser kamu tidak mendukung pemutaran video.
+          </video>
+          
+          <!-- Center Play Overlay -->
+          <button class="video-big-play" id="btn-big-play" aria-label="Play Video">
+            <span class="play-triangle">▶</span>
+          </button>
+          
+          <!-- Custom Controls Bar -->
+          <div class="custom-video-controls" id="custom-controls">
+            <button class="v-btn" id="btn-v-playpause" aria-label="Play or Pause">▶</button>
+            <span class="v-time" id="v-current-time">0:00</span>
+            
+            <div class="v-progress-container" id="v-progress-track">
+              <div class="v-progress-fill" id="v-progress-bar"></div>
+            </div>
+            
+            <span class="v-time" id="v-duration">0:00</span>
+            <button class="v-btn" id="btn-v-mute" aria-label="Mute or Unmute">🔊</button>
+            <button class="v-btn" id="btn-v-fullscreen" aria-label="Fullscreen">⛶</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="video-action">
+        <button id="btn-to-wishes" class="btn-primary glowing-btn">
+          <span class="btn-text" id="video-btn-text">BIRTHDAY WISHES ➜</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       SCREEN 7: BIRTHDAY WISHES (DOA & HARAPAN)
+       =================================================================== -->
+  <section id="screen-wishes" class="app-screen">
+    <div class="screen-content wishes-layout text-center">
+      <h2 class="section-title" id="wishes-title">Birthday Wishes</h2>
+      <p class="section-subtitle" id="wishes-subtitle">Happy birthday, my love 🤍</p>
+      
+      <!-- Wishes Glass Card -->
+      <div class="wishes-card-container">
+        <div class="wishes-card glass-panel interactive-card" id="wishes-card">
+          <div class="card-sparkle-top">✨</div>
+          <p class="wishes-text-content" id="wishes-text">
+            <!-- Injected from config -->
+          </p>
+          <div class="card-hearts-row">
+            <span class="burst-heart">🤍</span>
+            <span class="burst-heart">💖</span>
+            <span class="burst-heart">🤍</span>
+          </div>
+          <div class="card-click-hint">✨ Klik di kartu ini untuk mengirim cinta ✨</div>
+        </div>
+      </div>
+      
+      <div class="wishes-action">
+        <button id="btn-to-closing" class="btn-primary glowing-btn">
+          <span class="btn-text" id="wishes-btn-text">ONE MORE THING ➜</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       SCREEN 8: FINAL CLOSING (PENUTUP & JUDUL BERGANTIAN)
+       =================================================================== -->
+  <section id="screen-closing" class="app-screen">
+    <div class="screen-content closing-layout text-center">
+      <!-- Morphing animated title -->
+      <div class="morph-title-container">
+        <h1 class="morph-title" id="morph-title">Happy Birthday</h1>
+      </div>
+      
+      <div class="closing-messages">
+        <p class="closing-line" id="closing-msg-1">Thank you for being part of my life.</p>
+        <p class="closing-line" id="closing-msg-2">I hope this little gift can make your special day even more beautiful.</p>
+        <p class="closing-sig" id="closing-signature">Forever yours. 🤍</p>
+      </div>
+      
+      <div class="closing-action">
+        <button id="btn-replay" class="btn-primary glowing-btn">
+          <span class="btn-text" id="replay-btn-text">↺ REPLAY FROM START</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       PERSISTENT FLOATING MUSIC BADGE (BOTTOM RIGHT)
+       =================================================================== -->
+  <div class="music-floating-badge" id="music-badge" title="Klik untuk putar/jeda lagu">
+    <div class="music-disc" id="music-disc">
+      <span class="music-icon">♫</span>
+    </div>
+    <div class="music-info">
+      <div class="music-title-scroll">
+        <span id="badge-song-text">All I Want - Kodaline</span>
+      </div>
+      <div class="equalizer-bars" id="badge-eq">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <button class="badge-play-btn" id="badge-play-toggle" aria-label="Toggle Play">▶</button>
+  </div>
+
+  <!-- ===================================================================
+       LIGHTBOX MODAL FOR POLAROIDS
+       =================================================================== -->
+  <div class="lightbox-modal" id="lightbox-modal">
+    <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightbox-close">✕</button>
+      <div class="lightbox-polaroid">
+        <img id="lightbox-img" src="" alt="Polaroid Memory">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+      </div>
+      <div class="lightbox-nav">
+        <button id="lightbox-prev" class="lb-nav-btn">❮</button>
+        <button id="lightbox-next" class="lb-nav-btn">❯</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       MODAL: PANDUAN PENGISIAN MEDIA & CARA GANTI FOTO/LAGU
+       =================================================================== -->
+  <div class="guide-modal" id="guide-modal">
+    <div class="guide-backdrop" id="guide-backdrop"></div>
+    <div class="guide-box glass-panel">
+      <div class="guide-header">
+        <h3>📷 Panduan Mengisi / Mengganti Media</h3>
+        <button class="guide-close" id="guide-close">✕</button>
+      </div>
+      <div class="guide-body">
+        <p>Kamu bisa langsung mengganti media dengan cara menaruh filemu di folder <code>assets/</code> atau mengubah <code>config.js</code>:</p>
+        
+        <div class="guide-section">
+          <h4>1. Foto Polaroid (8 Foto)</h4>
+          <p>Cukup ganti file di folder <code>assets/</code> dengan nama yang sama:</p>
+          <ul>
+            <li><code>assets/photo1.jpg</code> s/d <code>assets/photo8.jpg</code></li>
+          </ul>
+        </div>
+        
+        <div class="guide-section">
+          <h4>2. Video Pesan</h4>
+          <p>Ganti file: <code>assets/video.mp4</code></p>
+        </div>
+
+        <div class="guide-section">
+          <h4>3. Musik / Lagu Latar</h4>
+          <p>Ganti file: <code>assets/music.mp3</code></p>
+        </div>
+
+        <div class="guide-section">
+          <h4>4. Teks, Tanggal & Surat Cinta</h4>
+          <p>Buka file <code>config.js</code> di editor. Di sana kamu bisa mengubah teks surat, tanggal hitung mundur, doa, dan nama sesukamu!</p>
+        </div>
+      </div>
+      <div class="guide-footer">
+        <button class="btn-primary guide-done-btn" id="guide-ok-btn">Saya Mengerti ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

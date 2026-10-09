@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+  <!-- Party Popper Cone -->
+  <path d="M10,54 L24,24 L44,44 Z" fill="url(#popperGrad)" />
+  <ellipse cx="34" cy="34" rx="14" ry="4" transform="rotate(-45 34 34)" fill="#fbbf24" />
+
+  <!-- Confetti Burst & Streamers -->
+  <!-- Streamers -->
+  <path d="M38,24 Q48,14 42,6" fill="none" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round" />
+  <path d="M46,30 Q56,22 54,12" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" />
+  <path d="M30,16 Q40,4 52,6" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Confetti Stars & Dots -->
+  <circle cx="48" cy="18" r="2.5" fill="#facc15" />
+  <circle cx="38" cy="10" r="2" fill="#4ade80" />
+  <circle cx="56" cy="24" r="2.5" fill="#f43f5e" />
+  <circle cx="28" cy="12" r="2" fill="#a855f7" />
+
+  <polygon points="56,8 58,11 61,12 58,13 56,16 55,13 52,12 55,11" fill="#fbbf24" />
+  <polygon points="42,28 43,30 45,31 43,32 42,34 41,32 39,31 41,30" fill="#38bdf8" />
+
+  <defs>
+    <linearGradient id="popperGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+  </defs>
+</svg>

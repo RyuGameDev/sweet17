@@ -1,0 +1,10 @@
+# Reference raw media & test captures
+WhatsApp Video 2026-10-09 at 04.08.09.mp4
+capture_tests.py
+screenshot_*.png
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
